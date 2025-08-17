@@ -4,11 +4,14 @@ import serial_asyncio
 
 
 class ArduinoBridge:
-    def __init__(self, port="COM3", baudrate=9600):  
+    def __init__(self, port, baudrate):  
         self.port = port
         self.baudrate = baudrate
         self.read = None
         self.write = None
+        self.clients= set()
+        self.active = False
+        self.tasks = set ()
 
     async def connect_serial(self):
 
@@ -18,40 +21,45 @@ class ArduinoBridge:
         print(f" Connected to Arduino on {self.port} at {self.baudrate} baud")
 
     async def handle_websocket(self, websocket):
-        
+        self.clients.add(websocket)
+
         async def arduino_to_frontend():
-            while True:
-                line = await self.read.readline()
-                if line:
+            while self.active:
+                try:
+                  line = await self.read.readline()
+                  if line and self.active:
                     msg = line.decode().strip()
                     print("the msg is:", msg)
                     await websocket.send(msg)
+                except asyncio.TimeoutError:
+                    continue
 
         async def frontend_to_arduino():
             async for command in websocket:
+                if not self.active:
+                    break  
                 print("the command is:", command)
                 self.write.write((command + "\n").encode())
                 await self.write.drain()
 
-        await asyncio.gather(
-            arduino_to_frontend(),
-            frontend_to_arduino()
-        )
+        task = asyncio.create_task(asyncio.gather(
+              arduino_to_frontend(),
+              frontend_to_arduino()
+        ))
 
-    async def start_server(self):
-    
-        async with websockets.serve(self.handle_websocket, "localhost", 8080):
-            print(" WebSocket server running at ws://localhost:8080")
-            await asyncio.Future()  
+        self.tasks.add(task)
+
+        async def stop_all(self):
+            self.active= False
+            for task in list(self.tasks):
+                task.cancel()
+            for client in list(self.clients):
+                await client.close()
+        self.tasks.clear()
+        self.clients.clear()
 
 
-async def main():
-    bridge = ArduinoBridge("COM3")  
-    await bridge.connect_serial()
-    await bridge.start_server()
 
-if __name__ == "__main__":
-    asyncio.run(main())
 
         
    

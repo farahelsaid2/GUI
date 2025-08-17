@@ -1,7 +1,7 @@
 function Connection(){
     const start = async () => {
         try {
-            const response = await fetch('/api/start');
+            const response = await fetch('http://127.0.0.1:8080/start');
             const data = await response.json();
             alert(data.message);
         }
@@ -12,7 +12,7 @@ function Connection(){
 
     const end = async () => {
         try {
-            const response = await fetch('/api/end');
+            const response = await fetch('http://127.0.0.1:8080/end');
             const data = await response.json();
             alert(data.message)
         }

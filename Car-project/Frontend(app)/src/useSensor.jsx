@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 
 function useSensor (name,url){
 
-const socketRef = useRef (null);
+    const socketRef = useRef (null);
     const [sensors, setSensors ]= useState(null);
 
     useEffect( () => {
