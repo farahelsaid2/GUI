@@ -7,7 +7,7 @@ function App() {
   return (
     <>
       <div>
-      <h1> Dashboard </h1>
+      <h1 className="header"> Control Panel </h1>
       <Connection/>
       <Sensors_Reading/>
       </div>
