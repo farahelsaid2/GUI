@@ -1,6 +1,6 @@
 import React from "react"
-import Manual from './mann.jsx'
-import  Cone from './Cone'
+import Manual from './Manual.jsx'
+import Sensors_Reading from "./Sensors_Reading.jsx";
 
 function App() {
 
@@ -8,10 +8,8 @@ function App() {
     <>
       <div>
       <h1 className="header"> Control Panel </h1>
-      <Cone/>
       <Manual/>
-    
-      
+      <Sensors_Reading/>
       </div>
     </>
   )

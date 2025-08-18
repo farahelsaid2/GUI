@@ -1,6 +1,5 @@
 # handles the websockets connections (just listen and function away from content of message)
 import asyncio
-from clients import handle_clients
 from fastapi import FastAPI
 import uvicorn
 from fastapi.middleware.cors import CORSMiddleware
@@ -39,7 +38,7 @@ async def start_communication():
         return {"message": "Communication already started"}
     bridge.active = True
     try:
-       bridge.connect_serial()
+       await bridge.connect_serial()
        return {"message": "Communication started"}
     except Exception:
         return{'Arduino not connected'}
@@ -72,6 +71,6 @@ async def websocket_endpoint(websocket: WebSocket):
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="127.0.0.1", port=8080)
+    uvicorn.run(app, host="127.0.0.1", port=8080) 
 
  

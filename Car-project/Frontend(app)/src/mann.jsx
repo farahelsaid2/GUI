@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+/*import { useState, useEffect, useRef } from "react";
 
 function Manual() {
   const [manualActive, setManualActive] = useState(false);
@@ -70,3 +70,4 @@ function Manual() {
 
 export default Manual;
 
+*/

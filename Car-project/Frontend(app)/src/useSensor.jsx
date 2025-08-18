@@ -1,4 +1,4 @@
-/* import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 
 function useSensor (url){
 
@@ -31,8 +31,6 @@ function useSensor (url){
            };
     }, [url] )
 
-return{
-    sensors
+return sensors;
 }
-}
-export default useSensor; */
+export default useSensor; 
