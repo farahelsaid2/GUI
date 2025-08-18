@@ -9,19 +9,30 @@ class ArduinoBridge:
         self.baudrate = baudrate
         self.read = None
         self.write = None
-        self.clients= set()
+        self.clients = [] 
         self.active = False
         self.tasks = set ()
+        self.connected = False
 
     async def connect_serial(self):
+        try:
 
-        self.read, self.write = await serial_asyncio.open_serial_connection(
-            url=self.port, baudrate=self.baudrate
+          self.read, self.write = await serial_asyncio.open_serial_connection(
+             url=self.port, baudrate=self.baudrate
         )
-        print(f" Connected to Arduino on {self.port} at {self.baudrate} baud")
+          self.connected= True
+          print(f" Connected to Arduino on {self.port} at {self.baudrate} baud")
 
+        except Exception as e:
+            self.connected = False
+            print(f"Arduino not connected: {e}")
+        
     async def handle_websocket(self, websocket):
         self.clients.add(websocket)
+
+        if not self.connected:
+            await websocket.send ('Arduino not connected')
+            return
 
         async def arduino_to_frontend():
             while self.active:

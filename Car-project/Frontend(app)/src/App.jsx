@@ -1,7 +1,6 @@
 import React from "react"
-import Connection from "./connection"
-import Sensors_Reading from "./Sensors_Reading.jsx";
-import Manual from "./Manual.jsx";
+import Manual from './mann.jsx'
+import  Cone from './Cone'
 
 function App() {
 
@@ -9,9 +8,9 @@ function App() {
     <>
       <div>
       <h1 className="header"> Control Panel </h1>
-      <Connection/>
+      <Cone/>
       <Manual/>
-      <Sensors_Reading/>
+    
       
       </div>
     </>

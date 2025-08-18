@@ -13,7 +13,7 @@ function Manual() {
   };
 
   useEffect(() => {
-    socket.current = new WebSocket("ws://localhost:8080");
+    socket.current = new WebSocket("ws://127.0.0.1:8080/ws");
 
     socket.current.onopen = () => console.log("Connected successfully");
     socket.current.onmessage = (event) => console.log("From Arduino:", event.data);

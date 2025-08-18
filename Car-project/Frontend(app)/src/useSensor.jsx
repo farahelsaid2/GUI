@@ -1,9 +1,9 @@
-import { useEffect, useState, useRef } from "react";
+/* import { useEffect, useState, useRef } from "react";
 
-function useSensor (name,url){
+function useSensor (url){
 
     const socketRef = useRef (null);
-    const [sensors, setSensors ]= useState(null);
+    const [sensors, setSensors ]= useState({});
 
     useEffect( () => {
 
@@ -14,10 +14,11 @@ function useSensor (name,url){
         };
         
        socketRef.current.onmessage = (event) => {
-        console.log('Message : ', event.data);
+          try {
         const data = JSON.parse(event.data);
-        if (data[name] !== undefined) {
-            setSensors(data[name])
+        setSensors(prev => ({ ...prev, ...data }));
+      } catch (err) {
+        console.error("Failed to parse sensor data:", err);
         }
        };
 
@@ -28,11 +29,10 @@ function useSensor (name,url){
            return () => {
            socketRef.current.close();
            };
-    }, [name,url] )
+    }, [url] )
 
 return{
-    name,
     sensors
 }
 }
-export default useSensor;
+export default useSensor; */

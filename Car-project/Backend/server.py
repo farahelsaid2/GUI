@@ -10,11 +10,19 @@ from fastapi import WebSocket, WebSocketDisconnect
 
 
 
-app = FastAPI()
+bridge = ArduinoBridge(port="COM3", baudrate=9600)
+bridge.active = False
 
+@asynccontextmanager
+async def lifespan(app):
+    print("Server starting...")
+    yield
+    print("Server shutting down...")
+
+app = FastAPI(lifespan=lifespan)
 origins = [
-    "http://localhost:5173",  
-    "http://127.0.0.1:5173",
+    "http://localhost:5173",
+    "http://127.0.0.1:5173", 
 ]
 
 app.add_middleware(
@@ -25,22 +33,18 @@ app.add_middleware(
     allow_headers=["*"],         
 )
 
-bridge = ArduinoBridge(port="COM3", baudrate=9600)
-bridge.active = False
-
-@asynccontextmanager
-async def lifespan(app):
-    print("Server starting...")
-    yield
-    print("Server shutting down...")
-
 @app.get('/start')
 async def start_communication():
     if bridge.active:
         return {"message": "Communication already started"}
     bridge.active = True
-    bridge.connect_serial()
-    return {"message": "Communication started"}
+    try:
+       bridge.connect_serial()
+       return {"message": "Communication started"}
+    except Exception:
+        return{'Arduino not connected'}
+
+    
 
 @app.get('/end')
 async def end_communication():
@@ -50,11 +54,12 @@ async def end_communication():
     for client in list(bridge.clients):
         await client.close()
     bridge.clients.clear()
+    return {"message": "Communication stopped successfully"}
 
 @app.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
-    if not getattr(bridge, "active", False):
+    if not bridge.active:
         await websocket.send_text("Server is not active. Please start communication first.")
         await websocket.close()
         return
@@ -62,6 +67,7 @@ async def websocket_endpoint(websocket: WebSocket):
         await bridge.handle_websocket(websocket)
     except WebSocketDisconnect:
         print("Client disconnected")
+
 
 
 
