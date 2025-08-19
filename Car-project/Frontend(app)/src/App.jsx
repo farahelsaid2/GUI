@@ -1,6 +1,6 @@
 import React from "react"
-import Manual from './Manual.jsx'
 import Sensors_Reading from "./Sensors_Reading.jsx";
+import Manual from "./mann.jsx";
 
 function App() {
 
@@ -8,7 +8,7 @@ function App() {
     <>
       <div>
       <h1 className="header"> Control Panel </h1>
-      <Manual/>
+     <Manual/>
       <Sensors_Reading/>
       </div>
     </>

@@ -1,7 +1,7 @@
 import useSensor from "./useSensor";
 
 function Sensors_Reading(){
-    const sensors = useSensor("ws://127.0.0.1:8080/ws")
+    const sensors = useSensor("ws://127.0.0.1:8080")
     /* const ultrasonic = useSensor('ultrasonic', "ws://127.0.0.1:8080") */
 
         const getColorClass = (value) => {
