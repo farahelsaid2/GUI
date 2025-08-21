@@ -21,8 +21,9 @@ function Manual() {
       setConnectionStatus("Connected"); 
     }; 
 
-    socket.current.onmessage = (event) => console.log("From Arduino:", event.data); 
-
+    socket.current.onmessage = (event) => {
+      console.log("From Arduino:", event.data);
+    }
     socket.current.onerror = (err) => { 
       console.error("WebSocket error:", err); 
       Alert("WebSocket error"); 
@@ -54,7 +55,7 @@ function Manual() {
   const enterManual = () => { 
     if (!manualActive) { 
       setManualActive(true); 
-      sendCommand("MOD:M", "MANUAL MODE IS ACTIVATED", true); 
+      sendCommand("MOD:MAN", "MANUAL MODE IS ACTIVATED", true); 
     } else { 
       Alert("Manual mode is already activated"); 
     } 
@@ -82,6 +83,9 @@ function Manual() {
         case "a": sendCommand("MOT:L", "GOING LEFT"); break; 
         case "d": sendCommand("MOT:R", "GOING RIGHT"); break; 
         case " ": sendCommand("MOT:S", "CAR STOPPED"); break; 
+        case "h": sendCommand("SPE:H", "HIGH SPEED ACTIVATED"); break;
+        case "l": sendCommand("SPE:L", "LOW SPEED ACTIVATED"); break;
+        case "m": sendCommand("SPE:M", "MED SPEED ACTIVATED"); break;
         default: break; 
       } 
     }; 
@@ -103,6 +107,9 @@ function Manual() {
             { label: "Left", onClick: () => sendCommand("MOT:L", "GOING LEFT") }, 
             { label: "Right", onClick: () => sendCommand("MOT:R", "GOING RIGHT") }, 
             { label: "Stop", onClick: () => sendCommand("MOT:S", "CAR STOPPED") }, 
+            { label: 'HIGH SPEED', onClick: () => sendCommand("SPE:H", "HIGH SPEED ACTIVATED") }, 
+            { label: 'LOW SPEED', onClick: () => sendCommand("SPE:L", "LOW SPEED ACTIVATED") }, 
+            { label: 'MED SPEED', onClick: () => sendCommand("SPE:M", "MED SPEED ACTIVATED") },
            
             { label: "Exit Manual", onClick: exitManual } 
           ].map((btn, i) => ( 

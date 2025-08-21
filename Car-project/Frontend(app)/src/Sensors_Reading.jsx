@@ -1,8 +1,7 @@
 import useSensor from "./useSensor";
 
 function Sensors_Reading(){
-    const sensors = useSensor("ws://127.0.0.1:8080")
-    /* const ultrasonic = useSensor('ultrasonic', "ws://127.0.0.1:8080") */
+    const sensors = useSensor("ws://localhost:8080")
 
         const getColorClass = (value) => {
         if (value < 4) return 'low';
@@ -16,14 +15,14 @@ function Sensors_Reading(){
         else return 'high';
         }
 
+    console.log("Current sensors state:", sensors);
+
 return(
         <>
-        <div className="sensor">
         <div className="sensor-content">
-        <p className={`${getColorClass(sensors.volt)}`}> Voltage into the car = {sensors.volt ?? 'Not connected'}</p>
+        <p className={`${getColorClass(sensors.volt) ?? 0}`}> Voltage into the car = {sensors.volt ?? 'Not connected'}</p>
         <p className={`${getColor(sensors.current)}`}> Current consumed by car = {sensors.current ??'Not connected'}  </p>
         <p> IMU reading = {sensors.IMU ? sensors.IMU.join(", ") : "Not connected"}</p>
-        </div>
         </div>
         </>
        );

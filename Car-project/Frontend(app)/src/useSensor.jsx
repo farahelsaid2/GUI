@@ -15,6 +15,7 @@ function useSensor (url){
         
        socketRef.current.onmessage = (event) => {
           try {
+        
         const data = JSON.parse(event.data);
         setSensors(prev => ({ ...prev, ...data }));
       } catch (err) {
